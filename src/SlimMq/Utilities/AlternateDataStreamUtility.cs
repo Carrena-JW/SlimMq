@@ -2,33 +2,25 @@
 
 namespace SlimMq.Utilities
 {
-    internal class AlternateDataStreamUtility
+    internal static class AlternateDataStreamUtility
     {
         private const string ADS_STREAM_TAG = "SlimMq";
 
         internal static void WriteFileIdToADS(string filePath, QueueFileMeta metaData)
         {
-            if (IsNTFS(filePath) is false)
-            {
-                return;
-            }
-
             var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
 
             using (FileStream fs = new FileStream(pathWithStreamTag, FileMode.Create, FileAccess.Write))
-            using (StreamWriter writer = new StreamWriter(fs))
             {
-                writer.Write(metaData);
+                using (StreamWriter writer = new StreamWriter(fs))
+                {
+                    writer.Write(metaData);
+                }
             }
         }
 
         internal static QueueFileMeta? ReadFileIdFromADS(string filePath)
         {
-            if (IsNTFS(filePath) is false)
-            {
-                return null;
-            }
-
             var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
 
             using (FileStream fs = new FileStream(pathWithStreamTag, FileMode.Open, FileAccess.Read))
@@ -40,9 +32,9 @@ namespace SlimMq.Utilities
             return new QueueFileMeta();
         }
 
-        private static bool IsNTFS(string path)
+        internal static bool IsNTFS(string path)
         {
-            var rootPath = Path.GetPathRoot(path);
+            var rootPath = Path.GetPathRoot(path)!;
 
             var driveInfo = new DriveInfo(rootPath);
 

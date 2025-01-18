@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Net.Mime.MediaTypeNames;
 
-namespace SlimMq.Host.Console.Tasks
+namespace SlimMq.Host.BatchTasks
 {
     internal class TestTask1
     {
@@ -13,11 +13,11 @@ namespace SlimMq.Host.Console.Tasks
         {
 
 
-            var _watcher = new FileSystemWatcher(Application.PickupPath);
-            _watcher.Created += FileCreated.EventHandler;
-            _watcher.Renamed += FileChanged.EventHandler;
-            _watcher.Filter = "*.pickup";
-            _watcher.EnableRaisingEvents = true;
+            //var _watcher = new FileSystemWatcher(Application.PickupPath);
+            //_watcher.Created += FileCreated.EventHandler;
+            //_watcher.Renamed += FileChanged.EventHandler;
+            //_watcher.Filter = "*.pickup";
+            //_watcher.EnableRaisingEvents = true;
 
 
 

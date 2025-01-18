@@ -11,4 +11,8 @@
     <Folder Include="Consumers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SlimMq\SlimMq.csproj" />
+  </ItemGroup>
+
 </Project>

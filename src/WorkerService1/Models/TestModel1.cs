@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SlimMq.Host.BatchModels
+namespace Swfa.Host.WindowsService.Models
 {
     internal class TestModel1
     {
         public int MyProperty1 { get; set; }
-        public string MyProperty2 { get; set; } = string.Empty;
-        //public DateTime MyProperty3 { get; set; } 
+        public string MyProperty2 { get; set; }
+        public DateTime MyProperty3 { get; set; }
     }
 }
