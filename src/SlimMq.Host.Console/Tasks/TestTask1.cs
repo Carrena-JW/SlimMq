@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace SlimMq.Host.Console.Tasks
 {
@@ -10,6 +11,16 @@ namespace SlimMq.Host.Console.Tasks
     {
         internal Task RunAync()
         {
+
+
+            var _watcher = new FileSystemWatcher(Application.PickupPath);
+            _watcher.Created += FileCreated.EventHandler;
+            _watcher.Renamed += FileChanged.EventHandler;
+            _watcher.Filter = "*.pickup";
+            _watcher.EnableRaisingEvents = true;
+
+
+
             return Task.CompletedTask;
         }
     }
