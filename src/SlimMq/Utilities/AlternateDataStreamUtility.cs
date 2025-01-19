@@ -10,26 +10,34 @@ namespace SlimMq.Utilities
         {
             var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
 
-            using (FileStream fs = new FileStream(pathWithStreamTag, FileMode.Create, FileAccess.Write))
+            using (var fs = new FileStream(pathWithStreamTag, FileMode.Create, FileAccess.Write))
             {
-                using (StreamWriter writer = new StreamWriter(fs))
+                using (var writer = new StreamWriter(fs))
                 {
-                    writer.Write(metaData);
+                    var json = JsonConvert.SerializeObject(metaData);
+                    writer.Write(json);
                 }
             }
         }
 
-        internal static QueueFileMeta? ReadFileIdFromADS(string filePath)
+        internal static async Task<QueueFileMeta?> ReadFileIdFromADSAsync(string filePath)
         {
             var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
 
-            using (FileStream fs = new FileStream(pathWithStreamTag, FileMode.Open, FileAccess.Read))
-            using (StreamReader reader = new StreamReader(fs))
+            using (var fs = new FileStream(pathWithStreamTag, FileMode.Open, FileAccess.Read))
             {
-                var data =  reader.ReadToEndAsync();
+                using (var reader = new StreamReader(fs))
+                {
+
+                    var data =   await reader.ReadToEndAsync();
+                    var metaData = JsonConvert.DeserializeObject<QueueFileMeta>(data);
+            return metaData;
+                }
+
             }
 
-            return new QueueFileMeta();
+            
+
         }
 
         internal static bool IsNTFS(string path)

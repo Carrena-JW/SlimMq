@@ -10,16 +10,17 @@ builder.Services.AddWindowsService(options =>
     options.ServiceName = "DSAD SWFA BatchService";
 });
 
-builder.Services.AddSingleton(async () =>
+if (true)
 {
     var consumer = new ConnectionFactory("E:\\SlimMq_Storage")
-    .CreateConsumer("TestBusiness1", "TestTask1");
+        .CreateConsumer("TestBusiness1", "TestTask1");
 
-    await consumer.ConsumeAsync<TestModel1>(() =>
+    await consumer.ConsumeAsync<TestModel1>(async () =>
     {
-        Console.WriteLine("This is action");
+        await Task.Delay(1000);
+        Console.WriteLine("Completed sendding email");
     });
-});
+}
 
 
 

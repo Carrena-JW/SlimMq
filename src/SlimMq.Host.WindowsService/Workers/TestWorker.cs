@@ -3,6 +3,7 @@ using System.Diagnostics;
 
 namespace Swfa.Host.WindowsService.Workers
 {
+    // initialize job
     public class TestWorker : BackgroundService
     {
         private readonly ILogger<TestWorker> _logger;

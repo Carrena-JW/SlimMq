@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Host", "Host", "{C84CB843-8
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SlimMq", "SlimMq\SlimMq.csproj", "{42BBCEA3-A4AF-42BD-91A7-862FDCA7B4FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Swfa.Host.WindowsService", "WorkerService1\Swfa.Host.WindowsService.csproj", "{E46EB16E-632D-4E01-9A12-C93E078667E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Swfa.Host.WindowsService", "SlimMq.Host.WindowsService\Swfa.Host.WindowsService.csproj", "{139522BA-DD92-4DBE-B81C-78F4263B7A21}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,16 +19,16 @@ Global
 		{42BBCEA3-A4AF-42BD-91A7-862FDCA7B4FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42BBCEA3-A4AF-42BD-91A7-862FDCA7B4FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42BBCEA3-A4AF-42BD-91A7-862FDCA7B4FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E46EB16E-632D-4E01-9A12-C93E078667E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E46EB16E-632D-4E01-9A12-C93E078667E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E46EB16E-632D-4E01-9A12-C93E078667E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E46EB16E-632D-4E01-9A12-C93E078667E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{139522BA-DD92-4DBE-B81C-78F4263B7A21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{139522BA-DD92-4DBE-B81C-78F4263B7A21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{139522BA-DD92-4DBE-B81C-78F4263B7A21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{139522BA-DD92-4DBE-B81C-78F4263B7A21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{E46EB16E-632D-4E01-9A12-C93E078667E2} = {C84CB843-8822-49C8-9127-9B2048DF6AF5}
+		{139522BA-DD92-4DBE-B81C-78F4263B7A21} = {C84CB843-8822-49C8-9127-9B2048DF6AF5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {12C7A7C5-A1C5-4352-BE63-99FC9FB1AC8F}
