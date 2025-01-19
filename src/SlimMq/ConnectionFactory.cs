@@ -1,18 +1,24 @@
-﻿namespace SlimMq;
+﻿using Microsoft.Extensions.Options;
+using SlimMq.Abstracts;
+
+namespace SlimMq;
 
 public class ConnectionFactory
 {
     private readonly string _fileQueueRootPath;
     private readonly string _tempFolderPath;
 
-    public ConnectionFactory(string fileQueueRootPath, bool allowAnonymusQueueFile = false)
+    public ConnectionFactory(IOptionsMonitor<SlimMqOptions> option)
+    //public ConnectionFactory(string fileQueueRootPath, bool allowAnonymusQueueFile = false)
     {
-        _fileQueueRootPath = fileQueueRootPath;
+        _fileQueueRootPath = option.CurrentValue.StorageRootPath;
         _tempFolderPath = Path.Combine(_fileQueueRootPath, "$temp");
         //_channelIdentifier = channelIdentifier;
 
         InitializeAsync();
     }
+
+   
 
     private Task InitializeAsync()
     {

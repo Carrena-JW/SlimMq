@@ -1,6 +1,4 @@
-﻿using SlimMq.Models;
-
-namespace SlimMq.Utilities
+﻿namespace SlimMq.Utilities
 {
     internal static class AlternateDataStreamUtility
     {
@@ -31,13 +29,9 @@ namespace SlimMq.Utilities
 
                     var data =   await reader.ReadToEndAsync();
                     var metaData = JsonConvert.DeserializeObject<QueueFileMeta>(data);
-            return metaData;
+                    return metaData;
                 }
-
             }
-
-            
-
         }
 
         internal static bool IsNTFS(string path)

@@ -1,4 +1,6 @@
-﻿namespace SlimMq;
+﻿using SlimMq.Abstracts;
+
+namespace SlimMq;
 
 public class Publisher : IPublisher
 {
@@ -29,12 +31,17 @@ public class Publisher : IPublisher
 
         await File.WriteAllTextAsync(fileNameWithTempPath,jsonBody);
 
-        AlternateDataStreamUtility.WriteFileIdToADS(fileNameWithTempPath, new QueueFileMeta
+        if (true)
         {
-            From = caller,
-            RouteKey = _routeKey,
-            TypeName = typeName,
-        });
+            AlternateDataStreamUtility.WriteFileIdToADS(fileNameWithTempPath, new QueueFileMeta
+            {
+                From = caller,
+                RouteKey = _routeKey,
+                TypeName = typeName,
+            });
+        }
+
+
 
         File.Move(fileNameWithTempPath, Path.Join(_channelPath, fileName));
     }

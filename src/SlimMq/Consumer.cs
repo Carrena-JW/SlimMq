@@ -1,4 +1,6 @@
-﻿namespace SlimMq;
+﻿using SlimMq.Abstracts;
+
+namespace SlimMq;
 
 public class Consumer : IConsumer
 {
@@ -12,31 +14,59 @@ public class Consumer : IConsumer
         _routeKey = routeKey;
         _channelPath = channelPath;
 
-        var watcherFilter = $"*{_routeKey}.{Const.QUEUE_FILE_EXTENTION}";
+        var watcherFilter = $"*_{routeKey}.{Const.QUEUE_FILE_EXTENTION}";
         _watcher = new FileSystemWatcher(_channelPath, watcherFilter);
     }
 
-    public Task ConsumeAsync<T>(Func<Task> action)
+    public async Task ConsumeAsync<T>(Func<Task> action)
     {
-        _watcher.Created += EventHandler;
+        _watcher.Created += EventHandler<T>;
+        _watcher.Error += ErrorEventHandler;
+        _watcher.InternalBufferSize = 65536;
         _watcher.EnableRaisingEvents = true;
         _action = action;
 
-        return Task.CompletedTask;
+        await Task.Delay(Timeout.Infinite);
+    }
+    //_exception = {"Too many changes at once in directory:E:\\SlimMq_Storage\\TestBusiness1."}
+
+    private void ErrorEventHandler(object sender, ErrorEventArgs e)
+    {
+        Console.WriteLine(e.ToString());
     }
 
-    private async void EventHandler(object sender, FileSystemEventArgs e)
+    private async void EventHandler<T>(object sender, FileSystemEventArgs e)
     {
-        await Task.Delay(1);
+        await Task.Delay(100);
 
-       // var meta = AlternateDataStreamUtility.ReadFileIdFromADSAsync(e.FullPath);
-            
+        var meta = await AlternateDataStreamUtility.ReadFileIdFromADSAsync(e.FullPath);
+
+        var body = await File.ReadAllTextAsync(e.FullPath);
+
+        var obj = JsonConvert.DeserializeObject<T>(body);
+
         await _action.Invoke();
 
-        Console.WriteLine("EvenrHandler !!");
+       // Console.WriteLine("EvenrHandler !!");
 
         // 큐제거
+        if (false)
+        {
+            await FileUtility.DeleteWithRetry(e.FullPath);
 
-        await FileUtility.DeleteWithRetry(e.FullPath);
+        }
+        else
+        {
+            try
+            {
+                File.Delete(e.FullPath);
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
     }
 }

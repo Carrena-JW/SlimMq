@@ -1,4 +1,4 @@
-﻿namespace SlimMq;
+﻿namespace SlimMq.Abstracts;
 
 public interface IPublisher
 {

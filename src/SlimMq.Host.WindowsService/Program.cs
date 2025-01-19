@@ -1,6 +1,6 @@
-using SlimMq;
-using Swfa.Host.WindowsService.Models;
-using Swfa.Host.WindowsService.Workers;
+using SlimMq.Exetentions;
+using Swfa.Host.WindowsService;
+using Swfa.Host.WindowsService.Consumers;
 
 var builder = Host.CreateApplicationBuilder(args);
 
@@ -10,24 +10,20 @@ builder.Services.AddWindowsService(options =>
     options.ServiceName = "DSAD SWFA BatchService";
 });
 
-if (true)
+builder.Services.AddSlimMq(config =>
 {
-    var consumer = new ConnectionFactory("E:\\SlimMq_Storage")
-        .CreateConsumer("TestBusiness1", "TestTask1");
-
-    await consumer.ConsumeAsync<TestModel1>(async () =>
-    {
-        await Task.Delay(1000);
-        Console.WriteLine("Completed sendding email");
-    });
-}
+    config.SetStoragePath("dddddddd");
+    config.AddConsumers(AssemblyReference.Assembly);
+});
 
 
+builder.Services.AddSingleton<TestConsumer>();
 
 LoggerProviderOptions.RegisterProviderOptions<
     EventLogSettings, EventLogLoggerProvider>(builder.Services);
 
 // Hosted Service µî·Ï
+builder.Services.AddHostedService<SubscribeWorker>();
 builder.Services.AddHostedService<TestWorker>();
 
 var host = builder.Build();
