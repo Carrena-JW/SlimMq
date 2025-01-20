@@ -2,6 +2,6 @@
 {
     public interface IConsumer
     {
-        Task ConsumeAsync<T>(Func<Task> action);
+        Task ConsumeAsync<T>(Func<T,Task> action);
     }
 }

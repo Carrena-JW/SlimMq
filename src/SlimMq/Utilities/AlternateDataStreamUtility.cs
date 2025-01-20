@@ -1,4 +1,6 @@
-﻿namespace SlimMq.Utilities
+﻿using System;
+
+namespace SlimMq.Utilities
 {
     internal static class AlternateDataStreamUtility
     {
@@ -20,18 +22,41 @@
 
         internal static async Task<QueueFileMeta?> ReadFileIdFromADSAsync(string filePath)
         {
-            var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
+            int retryCount = 5;
+            int attempCount = 0;
 
-            using (var fs = new FileStream(pathWithStreamTag, FileMode.Open, FileAccess.Read))
+            while (true)
             {
-                using (var reader = new StreamReader(fs))
+                try
+                {
+                    var pathWithStreamTag = GenerateFilePathWithStreamTag(filePath);
+
+                    using (var fs = new FileStream(pathWithStreamTag, FileMode.Open, FileAccess.Read))
+                    {
+                        using (var reader = new StreamReader(fs))
+                        {
+
+                            var data = await reader.ReadToEndAsync();
+                            var metaData = JsonConvert.DeserializeObject<QueueFileMeta>(data);
+                            return metaData;
+                        }
+                    }
+                }
+                catch (Exception ex)
                 {
 
-                    var data =   await reader.ReadToEndAsync();
-                    var metaData = JsonConvert.DeserializeObject<QueueFileMeta>(data);
-                    return metaData;
+                    if (attempCount < retryCount)
+                    {
+                        await Task.Delay(1000);
+                    }
+                    else
+                    {
+                        throw new ApplicationException($"Retry count exceeded: {retryCount}", ex);
+                    }
                 }
             }
+            
+            
         }
 
         internal static bool IsNTFS(string path)

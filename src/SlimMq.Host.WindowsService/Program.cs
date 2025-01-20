@@ -1,6 +1,6 @@
 using SlimMq.Exetentions;
 using Swfa.Host.WindowsService;
-using Swfa.Host.WindowsService.Consumers;
+using Swfa.Host.WindowsService.Subscribers;
 
 var builder = Host.CreateApplicationBuilder(args);
 

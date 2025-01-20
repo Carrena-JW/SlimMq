@@ -32,8 +32,10 @@ public class TestWorker : BackgroundService
 
             var numbers = Enumerable.Range(1, 10000);
 
+            var typeName = nameof(TestModel1);
+
             var publisher = _connectionFactory
-                .CreatePublisher("TestBusiness1", "TestTask1");
+                .CreatePublisher("TestBusiness1", typeName);
 
             var tasks = new List<Task>();
 
@@ -43,7 +45,7 @@ public class TestWorker : BackgroundService
                 {
                     await Task.Delay(1000); // 임의 지연시간 knox 결재건 상태체크 (1초)
 
-                    await publisher.PublishAsync("TestModel", new
+                    await publisher.PublishAsync(typeName, new 
                     {
                         MyProperty1 = number,
                         MyProperty2 = "TestModel",

@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.DependencyInjection;
 using SlimMq.Abstracts;
 
 namespace SlimMq.Exetentions
@@ -13,7 +11,10 @@ namespace SlimMq.Exetentions
 
             collection.ConfigureOptions<SlimMqOptionSetup>();
 
-            var cofigurator = new SlimMqConfigurator(collection);
+            var connetionFactory = collection.BuildServiceProvider()
+                .GetService<ConnectionFactory>()!;
+
+            var cofigurator = new SlimMqConfigurator(collection, connetionFactory);
 
             configure.Invoke(cofigurator);
 

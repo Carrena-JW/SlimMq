@@ -9,13 +9,15 @@ namespace SlimMq;
 public class SlimMqConfigurator : ISlimMqConfigurator
 {
     private readonly IOptionsMonitor<SlimMqOptions> _options;
+    private readonly ConnectionFactory _connectionFactory;
 
-    public SlimMqConfigurator(IServiceCollection collection)
+    public SlimMqConfigurator(IServiceCollection collection, ConnectionFactory connectionFactory)
     {
         var options = collection.BuildServiceProvider()
                 .GetRequiredService<IOptionsMonitor<SlimMqOptions>>();
-        
+
         _options = options;
+        _connectionFactory = connectionFactory;
     }
 
     public void SetStoragePath(string rootPath)
@@ -26,35 +28,45 @@ public class SlimMqConfigurator : ISlimMqConfigurator
 
     public void AddConsumers(params Assembly[] assemblies)
     {
-        return;
-
         foreach (var assembly in assemblies)
         {
-            // 모든 타입을 가져와서 ISubscriber<T>를 구현하는 타입을 찾습니다.
             var subscriberTypes = assembly.GetTypes()
                 .Where(t => t.IsClass && !t.IsAbstract && t.GetInterfaces()
                     .Any(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriber<>)));
 
             foreach (var type in subscriberTypes)
             {
-                // ISubscriber<T>의 T 타입을 가져옵니다.
                 var subscriberInterface = type.GetInterfaces()
                     .First(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(ISubscriber<>));
                 var messageType = subscriberInterface.GenericTypeArguments[0];
 
-                // 인스턴스를 생성합니다.
                 var instance = Activator.CreateInstance(type);
 
-                // 메시지와 CancellationToken을 준비합니다.
-                var message = Activator.CreateInstance(messageType); // 기본 생성자를 통한 메시지 인스턴스 생성
-                var token = new CancellationToken(); // 예시 토큰
+                var message = Activator.CreateInstance(messageType); 
 
-                // Subscribe 메서드를 호출합니다.
-                var subscribeMethod = subscriberInterface.GetMethod("Subscribe");
-                if (subscribeMethod != null)
+                var propertyInfo = type.GetProperty("Channel");
+
+                if (propertyInfo != null)
                 {
-                    // Subscribe 메서드를 비동기로 호출합니다.
-                    _ = subscribeMethod.Invoke(instance, new object[] { message, token });
+                    string channelValue = (string)propertyInfo.GetValue(instance)!;
+
+                    var consumer = _connectionFactory
+                            .CreateConsumer(channelValue, messageType.Name);
+
+                    var subscribeMethod = subscriberInterface.GetMethod("Subscribe");
+                    if (subscribeMethod != null)
+                    {
+                        var consumeAsyncMethod = consumer.GetType().GetMethod("ConsumeAsync")
+                            ?.MakeGenericMethod(messageType)!;
+
+                        var taks = (Task)consumeAsyncMethod.Invoke(consumer, new object[]
+                        {
+                            new Func<object, Task>(async (msg) =>
+                            {
+                                await (Task) subscribeMethod.Invoke(instance, new object[] { msg, new CancellationToken() })!;
+                            })
+                        })!;
+                    }
                 }
             }
         }

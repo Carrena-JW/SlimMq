@@ -1,4 +1,6 @@
-﻿namespace Swfa.Host.WindowsService.Workers;
+﻿using Swfa.Host.WindowsService.Subscribers;
+
+namespace Swfa.Host.WindowsService.Workers;
 
 internal class SubscribeWorker : BackgroundService
 {
@@ -13,7 +15,7 @@ internal class SubscribeWorker : BackgroundService
     {
         await Task.WhenAll(new List<Task>
         {
-            _testConsumer.Subscribe(default,stoppingToken)
+           // _testConsumer.Subscribe(default,stoppingToken)
         });
     }
 }
