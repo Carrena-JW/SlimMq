@@ -1,9 +1,6 @@
-﻿using SlimMq;
-using SlimMq.Abstracts;
+﻿namespace Swfa.Host.WindowsService.Subscribers;
 
-namespace Swfa.Host.WindowsService.Subscribers;
-
-internal class TestConsumer : ISubscriber<TestModel1>
+internal class TestSubscriber : ISubscriber<TestModel1>
 {
     public string Channel { get; init; } = "TestBusiness1";
 

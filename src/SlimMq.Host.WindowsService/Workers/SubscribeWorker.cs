@@ -1,12 +1,10 @@
-﻿using Swfa.Host.WindowsService.Subscribers;
-
-namespace Swfa.Host.WindowsService.Workers;
+﻿namespace Swfa.Host.WindowsService.Workers;
 
 internal class SubscribeWorker : BackgroundService
 {
-    private readonly TestConsumer _testConsumer;
+    private readonly TestSubscriber _testConsumer;
 
-    public SubscribeWorker(TestConsumer testConsumer)
+    public SubscribeWorker(TestSubscriber testConsumer)
     {
         _testConsumer = testConsumer;
     }

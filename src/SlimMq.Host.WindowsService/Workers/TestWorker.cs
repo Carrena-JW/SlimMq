@@ -1,6 +1,3 @@
-
-using Microsoft.Extensions.Options;
-
 namespace Swfa.Host.WindowsService.Workers;
 
 // initialize job

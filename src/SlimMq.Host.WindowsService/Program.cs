@@ -1,7 +1,3 @@
-using SlimMq.Exetentions;
-using Swfa.Host.WindowsService;
-using Swfa.Host.WindowsService.Subscribers;
-
 var builder = Host.CreateApplicationBuilder(args);
 
 // Windows 서비스로 실행할 수 있도록 설정
@@ -17,7 +13,7 @@ builder.Services.AddSlimMq(config =>
 });
 
 
-builder.Services.AddSingleton<TestConsumer>();
+builder.Services.AddSingleton<TestSubscriber>();
 
 LoggerProviderOptions.RegisterProviderOptions<
     EventLogSettings, EventLogLoggerProvider>(builder.Services);

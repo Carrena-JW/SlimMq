@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Swfa.Host.WindowsService;
+﻿namespace Swfa.Host.WindowsService;
 
 public static class AssemblyReference
 {
